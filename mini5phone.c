@@ -62,16 +62,16 @@ int loadCSV(char *filename) {
 
 int saveCSV(char *filename) {
 	FILE *p = fopen(filename,"wt");
-	int i;
+	struct PHONE_NODE *anode = head;
 
 	if (p == NULL) return 1; // error code
 
-	if (nextIndex <= 0) return 2; // error code
+	if (anode == NULL) return 2; // error code
 
 	fprintf(p,"name,birthdate,phone\n");
 
-	for(i=0; i<nextIndex; i++)
-		fprintf(p,"%s,%s,%s\n", phonebook[i].name, phonebook[i].birthdate, phonebook[i].phone);
+	while(node)
+		fprintf(p,"%s,%s,%s\n", anode->name, anode->birthdate, anode->phone);
 
 	fclose(p);
 
@@ -79,14 +79,23 @@ int saveCSV(char *filename) {
 }
 
 int addRecord(char name[], char birth[], char phone[]) {
-	if (nextIndex >= MAX_RECORDS) return 1; //error code
+	struct PHONE_NODE *anode = (struct PHONE_NODE*) malloc(sizeof(struct PHONE_NODE));
+	if (anode == NULL) return 1; //error code
 
-	strcpy(phonebook[nextIndex].name, name);
-	strcpy(phonebook[nextIndex].birthdate, birth);
-	strcpy(phonebook[nextIndex].phone, phone);
+	strcpy(anode->name, name);
+	strcpy(anode->birthdate, birth);
+	strcpy(anode->phone, phone);
+	anode->next = NULL;
 
-	nextIndex++;
-	isEmptyCSV = 0;
+	if (head == NULL)
+		head = anode;
+	else
+		struct PHONE_NODE *curr = head;
+		while(curr->next)
+			curr = curr->next;
+
+		curr->next = anode;
+
 
 	return 0;
 }
