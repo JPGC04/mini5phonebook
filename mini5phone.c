@@ -119,14 +119,15 @@ void printContent(char *name, char *bith, char *phone) {
 }
 
 int listRecords() {
-	int i;
 
-	if (nextIndex == 0 || isEmptyCSV) return 1;
+	if (head == NULL || isEmptyCSV) return 1;
 
 	printHeading();
-
-	for(i=0; i<nextIndex; i++)
-		printContent(phonebook[i].name, phonebook[i].birthdate, phonebook[i].phone);
+	
+	*PHONE_NODE curr = head;
+	while(curr != NULL)
+		printContent(curr->name, curr->birthdate, curr->phone);
+		curr = curr->next;
 
 	return 0;	
 }
