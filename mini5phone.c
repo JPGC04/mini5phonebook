@@ -1,16 +1,15 @@
 #include<stdio.h>
 #include<string.h>
 
-#define MAX_RECORDS 10
 
 struct PHONE_RECORD {
 	char name[50];
 	char birthdate[12];
 	char phone[15];
-} phonebook[MAX_RECORDS];
+	struct PHONE_NODE *next;
+} 
 
-int nextIndex = 0; // assumes phonebook is empty
-int isEmptyCSV = 1; // assume empty
+struct PHONE_NODE *head = NULL;
 
 int loadCSV(char *filename) {
 	FILE *p = fopen(filename, "rt");
@@ -18,40 +17,42 @@ int loadCSV(char *filename) {
 	int i,j;
 
 	if (p == NULL) {
-		isEmptyCSV = 1; // make true
 		return 1; // error code
 	}
 
 	// otherwise, the file is open, read CSV
 	
 	fgets(buffer,999,p); // to read the CSV header (we discard it)
-	isEmptyCSV = 0; // it is not empty
 
-	nextIndex = 0;
 	fgets(buffer,999,p);
 	while(!feof(p)) {
 		// parse the CSV record
-
+		struct PHONE_NODE *anode = (struct PHONE_NODE*) malloc(sizeof(struct PHONE_NODE));
 		for(j=0,i=0;i<999&&buffer[i]!='\0'&&buffer[i]!=',';i++,j++)
-			phonebook[nextIndex].name[j]=buffer[i];
+			anode->name[j]=buffer[i];
 
-		phonebook[nextIndex].name[j]='\0';
+		anode->name[j]='\0';
 		i++;
 
 		for(j=0;i<999&&buffer[i]!='\0'&&buffer[i]!=',';i++,j++)
-			phonebook[nextIndex].birthdate[j]=buffer[i];
+			anode->birthdate[j]=buffer[i];
 
-		phonebook[nextIndex].birthdate[j]='\0';
+		anode->birthdate[j]='\0';
 		i++;
 
 		for(j=0;i<999&&buffer[i]!='\0'&&buffer[i]!='\n';i++,j++)
-			phonebook[nextIndex].phone[j]=buffer[i];
+			anode->phone[j]=buffer[i];
 
-		phonebook[nextIndex].phone[j]='\0';
+		anode->phone[j]='\0';
+		anode->next = NULL;
 
-		// Get the next record
-		fgets(buffer,999,p);
-		nextIndex++;
+		//add node to the linked list 
+		if(prev == NULL) {
+			head = anode;
+		}else {
+			prev->next = anode
+		}
+		prev = anode;
 	}
 
 	fclose(p);
