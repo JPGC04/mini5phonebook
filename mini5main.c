@@ -38,7 +38,7 @@ int main() {
 				
 				record = findRecord(name);
 
-				if (record == -1) printf("Does not exist\n");
+				if (record == NULL) printf("Does not exist\n");
 				else {
 					printHeading();
 					printContent(phonebook[record].name, phonebook[record].birthdate, phonebook[record].phone);
