@@ -1,8 +1,8 @@
 #include<stdio.h>
 #include<string.h>
+#include<stdlib.h>
 
-
-struct PHONE_RECORD {
+struct PHONE_NODE {
 	char name[50];
 	char birthdate[12];
 	char phone[15];
@@ -50,7 +50,7 @@ int loadCSV(char *filename) {
 		if(prev == NULL) {
 			head = anode;
 		}else {
-			prev->next = anode
+			prev->next = anode;
 		}
 		prev = anode;
 	}
@@ -70,7 +70,7 @@ int saveCSV(char *filename) {
 
 	fprintf(p,"name,birthdate,phone\n");
 
-	while(node)
+	while(anode)
 		fprintf(p,"%s,%s,%s\n", anode->name, anode->birthdate, anode->phone);
 
 	fclose(p);
@@ -100,15 +100,16 @@ int addRecord(char name[], char birth[], char phone[]) {
 	return 0;
 }
 
-int findRecord(char name[]) {
-	int i;
+struct PHONE_NODE* findrecord(char name[]) {
+	struct PHONE_NODE curr = head;
+	while(curr) 
+		if(strcmp(curr->name, name) == 0)
+			return curr; 
 
-	for(i=0; i<MAX_RECORDS; i++) {
-		if (strcmp(phonebook[i].name, name) == 0) return i;
-	}
-
-	return -1;
+		curr = curr -> next;
+	return NULL; 	
 }
+
 
 void printHeading() {
 	 printf("---- NAME ---- ---- BIRTH DATE ---- ---- PHONE ----\n");

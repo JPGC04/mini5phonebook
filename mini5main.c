@@ -14,6 +14,7 @@ int menu() {
 }
 
 int main() {
+	struct PHONE_NODE *head = NULL;
 	int choice, record;
 	char name[50], birth[50], phone[50];
 
@@ -41,7 +42,7 @@ int main() {
 				if (record == NULL) printf("Does not exist\n");
 				else {
 					printHeading();
-					printContent(phonebook[record].name, phonebook[record].birthdate, phonebook[record].phone);
+					printContent(record->name, record->birthdate, record->phone);
 				}
 				break;
 
