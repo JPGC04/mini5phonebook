@@ -146,6 +146,12 @@ int delete(char name[]) {
 		return 1;
 	}
 
+	if (curr->name == name) {
+		curr = nextNode;
+		free(curr);
+		return 0;
+	}
+
 	while (curr != NULL) {
 		if (strcmp(nextNode->name, name) == 0) {
 			curr->next = nextNode->next;
