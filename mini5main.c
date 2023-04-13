@@ -68,12 +68,14 @@ int main() {
 							break;
 						}
 
+						break;
+
 					default:
 						printf("Invalid menu selection\n");
 						break;
 
 				}
-
+				break;
 			case 3:
 				printf("Find name: "); fgets(name,49,stdin); name[strlen(name)-1] = '\0';
 
