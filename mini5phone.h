@@ -15,3 +15,4 @@ int loadCSV(char *filename);
 void printHeading();
 void printContent(char *name, char *birthdate, char *phone);
 int delete(char name[]);
+int clear();

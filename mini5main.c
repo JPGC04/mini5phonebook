@@ -35,12 +35,42 @@ int main() {
 				break;
 
 			case 2:
-				printf("Name to delete: "); fgets(name, 49, stdin); name[strlen(name)-1] = '\0';
+				char *select2;
+				int choice2;
 
-				exitCode = delete(name);
-				if (exitCode != 0) printf("Sorry not found\n");
+				printf("(D)elete or (C)lear > "); scanf("%s", select2);
+				if (strcmp(select2, "D") == 0) {
+					choice2 = 1;
+				} else if (strcmp(select2, "C") == 0) {
+					choice2 = 2;
+				} else {
+					choice2 = 3;
+				}
 
-				break;
+				switch(choice2) {
+					case 1:
+						printf("Name to delete: "); fgets(name, 49, stdin); name[strlen(name)-1] = '\0';
+						exitCode = delete(name);
+						if (exitCode != 0) printf("Sorry not found\n");
+						break;
+
+					case 2:
+						char *select3;
+
+						printf("Are you sure (Y/N) > ");  scanf("%s", select3);
+
+						if (strcmp(select3, "Y") == 0) {
+							clear();
+							break;
+
+						} else if(strcmp(select3, "N") == 0) {
+							break;
+						}
+
+					default:
+						printf("Invalid menu selection\n");
+
+				}
 
 			case 3:
 				printf("Find name: "); fgets(name,49,stdin); name[strlen(name)-1] = '\0';

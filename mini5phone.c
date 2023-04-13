@@ -170,3 +170,16 @@ int delete(char name[]) {
 	return 1;
 		
 }
+
+int clear() {
+	struct PHONE_NODE *curr = head;
+	struct PHONE_Node *temp;
+
+	while (curr != NULL) {
+		temp = curr;
+		curr = curr->next;
+		free(temp);
+	}
+
+	head = NULL;
+}
