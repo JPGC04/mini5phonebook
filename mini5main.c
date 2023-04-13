@@ -1,7 +1,6 @@
 #include<stdio.h>
 #include "mini5phone.c"
-
-extren struct PHONE_NODE *head;
+#include "mini5phone.h"
 
 int menu() {
 	int selection;
@@ -17,7 +16,7 @@ int menu() {
 int main() {
 	int choice;
 	int exitCode;
-	struct record;
+	struct PHONE_NODE *record;
 	char name[50], birth[50], phone[50];
 
 	loadCSV("phonebook.csv");

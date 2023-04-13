@@ -2,14 +2,8 @@
 #include<string.h>
 #include<stdlib.h>
 
-struct PHONE_NODE {
-	char name[50];
-	char birthdate[12];
-	char phone[15];
-	struct PHONE_NODE *next;
-};
+#include "mini5phone.h"
 
-struct PHONE_NODE *head = NULL;
 
 int loadCSV(char *filename) {
 	FILE *p = fopen(filename, "rt");
@@ -85,36 +79,38 @@ int saveCSV(char *filename) {
 
 int addRecord(char name[], char birth[], char phone[]) {
     struct PHONE_NODE *anode = (struct PHONE_NODE*) malloc(sizeof(struct PHONE_NODE));
-	if (anode == NULL) return 1; //error code
+    if (anode == NULL) {
+	    return 1;
+    } //error code
 
-	strcpy(anode->name, name);
-	strcpy(anode->birthdate, birth);
-	strcpy(anode->phone, phone);
+    strcpy(anode->name, name);
+    strcpy(anode->birthdate, birth);
+    strcpy(anode->phone, phone);
 
     anode->next = NULL;
 
     struct PHONE_NODE *curr = head;
     if (head == NULL){
         head = anode;
-    } else { 
+    } else {
+	struct PHONE_NODE *curr = head;
         while(curr->next){
             curr = curr->next;
 	}
+	curr->next = anode;
     }
-    curr->next = anode;        
-
-
-	return 0;
+    return 0;
 }
 
 
 struct PHONE_NODE* findRecord(char name[]) {
 	struct PHONE_NODE *curr = head;
-	while(curr) 
-		if(strcmp(curr->name, name) == 0)
-		return curr; 
-
-		curr = curr -> next;
+	while(curr != NULL) {
+	       if(strcmp(curr->name, name) == 0) {
+		       return curr;
+	       }
+	       curr = curr -> next;
+	}
 	return NULL; 	
 }
 
