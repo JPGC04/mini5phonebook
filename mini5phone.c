@@ -72,6 +72,7 @@ int saveCSV(char *filename) {
 
 	while(anode){
 		fprintf(p,"%s,%s,%s\n", anode->name, anode->birthdate, anode->phone);
+		anode = anode->next;
 	}
 	fclose(p);
 
