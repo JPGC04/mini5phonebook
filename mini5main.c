@@ -1,5 +1,4 @@
 #include<stdio.h>
-#include "mini5phone.c"
 #include "mini5phone.h"
 
 int menu() {

@@ -4,6 +4,7 @@
 
 #include "mini5phone.h"
 
+struct PHONE_NODE *head = NULL;
 
 int loadCSV(char *filename) {
 	FILE *p = fopen(filename, "rt");
