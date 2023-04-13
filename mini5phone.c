@@ -1,57 +1,63 @@
 #include<stdio.h>
 #include<string.h>
+#include<stdlib.h>
 
-#define MAX_RECORDS 10
-
-struct PHONE_RECORD {
+struct PHONE_NODE {
 	char name[50];
 	char birthdate[12];
 	char phone[15];
-} phonebook[MAX_RECORDS];
+	struct PHONE_NODE *next;
+};
 
-int nextIndex = 0; // assumes phonebook is empty
-int isEmptyCSV = 1; // assume empty
+struct PHONE_NODE *head = NULL;
 
 int loadCSV(char *filename) {
 	FILE *p = fopen(filename, "rt");
 	char buffer[1000];
 	int i,j;
-
+	struct PHONE_NODE *prev = NULL;
 	if (p == NULL) {
-		isEmptyCSV = 1; // make true
 		return 1; // error code
 	}
 
 	// otherwise, the file is open, read CSV
 	
 	fgets(buffer,999,p); // to read the CSV header (we discard it)
-	isEmptyCSV = 0; // it is not empty
 
-	nextIndex = 0;
+
+	//nextIndex = 0;
 	fgets(buffer,999,p);
 	while(!feof(p)) {
 		// parse the CSV record
 
-		for(j=0,i=0;i<999&&buffer[i]!='\0'&&buffer[i]!=',';i++,j++)
-			phonebook[nextIndex].name[j]=buffer[i];
+		struct PHONE_NODE *anode = (struct PHONE_NODE*) malloc(sizeof(struct PHONE_NODE));
 
-		phonebook[nextIndex].name[j]='\0';
+		for(j=0,i=0;i<999&&buffer[i]!='\0'&&buffer[i]!=',';i++,j++)
+			anode->name[j]=buffer[i];
+
+		anode->name[j]='\0';
 		i++;
 
 		for(j=0;i<999&&buffer[i]!='\0'&&buffer[i]!=',';i++,j++)
-			phonebook[nextIndex].birthdate[j]=buffer[i];
+			anode->birthdate[j]=buffer[i];
 
-		phonebook[nextIndex].birthdate[j]='\0';
+		anode->birthdate[j]='\0';
 		i++;
 
 		for(j=0;i<999&&buffer[i]!='\0'&&buffer[i]!='\n';i++,j++)
-			phonebook[nextIndex].phone[j]=buffer[i];
+			anode->phone[j]=buffer[i];
 
-		phonebook[nextIndex].phone[j]='\0';
+		anode->phone[j]='\0';
+		anode->next = NULL;
 
-		// Get the next record
-		fgets(buffer,999,p);
-		nextIndex++;
+		// add the node to the linked list
+
+		if (prev == NULL){
+			head = anode;
+		}else{
+			prev->next = anode;
+		}
+		prev = anode;
 	}
 
 	fclose(p);
@@ -61,43 +67,55 @@ int loadCSV(char *filename) {
 
 int saveCSV(char *filename) {
 	FILE *p = fopen(filename,"wt");
-	int i;
+	struct PHONE_NODE *anode = head;
 
 	if (p == NULL) return 1; // error code
 
-	if (nextIndex <= 0) return 2; // error code
+	if (anode == NULL) return 2; // error code
 
 	fprintf(p,"name,birthdate,phone\n");
 
-	for(i=0; i<nextIndex; i++)
-		fprintf(p,"%s,%s,%s\n", phonebook[i].name, phonebook[i].birthdate, phonebook[i].phone);
-
+	while(anode){
+		fprintf(p,"%s,%s,%s\n", anode->name, anode->birthdate, anode->phone);
+	}
 	fclose(p);
 
 	return 0;
 }
 
 int addRecord(char name[], char birth[], char phone[]) {
-	if (nextIndex >= MAX_RECORDS) return 1; //error code
+    struct PHONE_NODE *anode = (struct PHONE_NODE*) malloc(sizeof(struct PHONE_NODE));
+	if (anode == NULL) return 1; //error code
 
-	strcpy(phonebook[nextIndex].name, name);
-	strcpy(phonebook[nextIndex].birthdate, birth);
-	strcpy(phonebook[nextIndex].phone, phone);
+	strcpy(anode->name, name);
+	strcpy(anode->birthdate, birth);
+	strcpy(anode->phone, phone);
 
-	nextIndex++;
-	isEmptyCSV = 0;
+    anode->next = NULL;
+
+    struct PHONE_NODE *curr = head;
+    if (head == NULL){
+        head = anode;
+    } else { 
+        while(curr->next){
+            curr = curr->next;
+	}
+    }
+    curr->next = anode;        
+
 
 	return 0;
 }
 
-int findRecord(char name[]) {
-	int i;
 
-	for(i=0; i<MAX_RECORDS; i++) {
-		if (strcmp(phonebook[i].name, name) == 0) return i;
-	}
+struct PHONE_NODE* findRecord(char name[]) {
+	struct PHONE_NODE *curr = head;
+	while(curr) 
+		if(strcmp(curr->name, name) == 0)
+		return curr; 
 
-	return -1;
+		curr = curr -> next;
+	return NULL; 	
 }
 
 void printHeading() {
@@ -109,14 +127,16 @@ void printContent(char *name, char *bith, char *phone) {
 }
 
 int listRecords() {
-	int i;
 
-	if (nextIndex == 0 || isEmptyCSV) return 1;
+	if (head == NULL) return 1;
 
 	printHeading();
 
-	for(i=0; i<nextIndex; i++)
-		printContent(phonebook[i].name, phonebook[i].birthdate, phonebook[i].phone);
 
+	struct PHONE_NODE *curr = head;
+	while(curr != NULL) {
+		printContent(curr->name, curr->birthdate, curr->phone);
+		curr = curr->next;
+	}
 	return 0;	
 }
