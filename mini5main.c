@@ -5,9 +5,9 @@ int menu() {
 	int selection;
 	char garbage[5];
 
-	printf("Phonebook Menu: (1)Add, (2)Find, (3)List, (4)Quit > ");
+	printf("Phonebook Menu: (1)Add, (2)Delete/Clear, (3)Find, (4)List (5)Quit > ");
 	scanf("%d", &selection);
-	fgets(garbage,4,stdin);
+	fgets(garbage,5,stdin);
 
 	return selection;
 }
@@ -35,30 +35,33 @@ int main() {
 				break;
 
 			case 2:
-				printf("Find name: "); fgets(name,49,stdin); name[strlen(name)-1] = '\0';
-				
-				record = findRecord(name);
-
-				if (record == NULL) printf("Does not exist\n");
-				else {
-					printHeading();
-					printContent(record->name, record->birthdate, record->phone);
-				}
-				break;
+				break; // Temporary until updated
 
 			case 3:
-				exitCode = listRecords();
+				printf("Find name: "); fgets(name,49,stdin); name[strlen(name)-1] = '\0';
 
-				if (exitCode != 0) printf("Phonebook.csv does not exist\n");
-				break;
+                                record = findRecord(name);
+
+                                if (record == NULL) printf("Does not exist\n");
+                                else {
+                                        printHeading();
+                                        printContent(record->name, record->birthdate, record->phone);
+                                }
+                                break;
 
 			case 4:
+				exitCode = listRecords();
+
+                                if (exitCode != 0) printf("Phonebook.csv does not exist\n");
+                                break;
+
+			case 5:
 				break;
 
 			default:
 				printf("Invalid menu selection\n");
 		}
-	} while(choice != 4);
+	} while(choice != 5);
 
 	saveCSV("phonebook.csv");
 
