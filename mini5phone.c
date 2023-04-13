@@ -62,12 +62,12 @@ int loadCSV(char *filename) {
 int saveCSV(char *filename) {
 	FILE *p = fopen(filename,"wt");
 	struct PHONE_NODE *anode = head;
+	
+	fprintf(p,"name,birthdate,phone\n");
 
 	if (p == NULL) return 1; // error code
 
 	if (anode == NULL) return 2; // error code
-
-	fprintf(p,"name,birthdate,phone\n");
 
 	while(anode){
 		fprintf(p,"%s,%s,%s\n", anode->name, anode->birthdate, anode->phone);
@@ -139,20 +139,24 @@ int listRecords() {
 }
 
 int delete(char name[]) {
-	struct PHONE_NODE *curr = head;
-	struct PHONE_NODE *nextNode = curr->next;
-
-	if (findRecord(name) == NULL) {
+	if (head == NULL) {
 		return 1;
 	}
 
-	if (curr->name == name) {
-		curr = nextNode;
+	struct PHONE_NODE *curr = head;
+	struct PHONE_NODE *nextNode = curr->next;
+	
+	if (head->name == NULL) {
+		return 1;
+	}
+
+	if (strcmp(curr->name, name) == 0) {
+		head = nextNode;
 		free(curr);
 		return 0;
 	}
 
-	while (curr != NULL) {
+	while (nextNode != NULL) {
 		if (strcmp(nextNode->name, name) == 0) {
 			curr->next = nextNode->next;
 			free(nextNode);
@@ -163,6 +167,6 @@ int delete(char name[]) {
         	nextNode = nextNode->next;
 	}
 
-	return 0;
+	return 1;
 		
 }
