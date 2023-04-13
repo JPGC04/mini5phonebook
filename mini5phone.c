@@ -22,7 +22,7 @@ int loadCSV(char *filename) {
 
 	//nextIndex = 0;
 	fgets(buffer,999,p);
-	while(!feof(p)) {
+	while(fgets(buffer, 999, p)) {
 		// parse the CSV record
 
 		struct PHONE_NODE *anode = (struct PHONE_NODE*) malloc(sizeof(struct PHONE_NODE));
