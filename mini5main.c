@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include "mini5phone.c"
 
+extren struct PHONE_NODE *head;
 
 int menu() {
 	int selection;
@@ -14,8 +15,9 @@ int menu() {
 }
 
 int main() {
-	struct PHONE_NODE *head = NULL;
-	int choice, record;
+	int choice;
+	int exitCode;
+	struct record;
 	char name[50], birth[50], phone[50];
 
 	loadCSV("phonebook.csv");
@@ -29,8 +31,8 @@ int main() {
 				printf("Birth: "); fgets(birth,12,stdin); birth[strlen(birth)-1] = '\0';
 				printf("Phone: "); fgets(phone,14,stdin); phone[strlen(phone)-1] = '\0';
 
-				record = addRecord(name, birth, phone);
-				if (record != 0) printf("CSV if out of space\n");
+				exitCode = addRecord(name, birth, phone);
+				if (exitCode != 0) printf("CSV if out of space\n");
 
 				break;
 
@@ -47,9 +49,9 @@ int main() {
 				break;
 
 			case 3:
-				record = listRecords();
+				exitCode = listRecords();
 
-				if (record != 0) printf("Phonebook.csv does not exist\n");
+				if (exitCode != 0) printf("Phonebook.csv does not exist\n");
 				break;
 
 			case 4:

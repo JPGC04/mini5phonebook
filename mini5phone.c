@@ -7,7 +7,7 @@ struct PHONE_NODE {
 	char birthdate[12];
 	char phone[15];
 	struct PHONE_NODE *next;
-} 
+};
 
 struct PHONE_NODE *head = NULL;
 
@@ -15,7 +15,7 @@ int loadCSV(char *filename) {
 	FILE *p = fopen(filename, "rt");
 	char buffer[1000];
 	int i,j;
-
+	struct PHONE_NODE *prev = NULL;
 	if (p == NULL) {
 		return 1; // error code
 	}
@@ -24,10 +24,14 @@ int loadCSV(char *filename) {
 	
 	fgets(buffer,999,p); // to read the CSV header (we discard it)
 
+
+	//nextIndex = 0;
 	fgets(buffer,999,p);
 	while(!feof(p)) {
 		// parse the CSV record
+
 		struct PHONE_NODE *anode = (struct PHONE_NODE*) malloc(sizeof(struct PHONE_NODE));
+
 		for(j=0,i=0;i<999&&buffer[i]!='\0'&&buffer[i]!=',';i++,j++)
 			anode->name[j]=buffer[i];
 
@@ -46,10 +50,11 @@ int loadCSV(char *filename) {
 		anode->phone[j]='\0';
 		anode->next = NULL;
 
-		//add node to the linked list 
-		if(prev == NULL) {
+		// add the node to the linked list
+
+		if (prev == NULL){
 			head = anode;
-		}else {
+		}else{
 			prev->next = anode;
 		}
 		prev = anode;
@@ -70,46 +75,48 @@ int saveCSV(char *filename) {
 
 	fprintf(p,"name,birthdate,phone\n");
 
-	while(anode)
+	while(anode){
 		fprintf(p,"%s,%s,%s\n", anode->name, anode->birthdate, anode->phone);
-
+	}
 	fclose(p);
 
 	return 0;
 }
 
 int addRecord(char name[], char birth[], char phone[]) {
-	struct PHONE_NODE *anode = (struct PHONE_NODE*) malloc(sizeof(struct PHONE_NODE));
+    struct PHONE_NODE *anode = (struct PHONE_NODE*) malloc(sizeof(struct PHONE_NODE));
 	if (anode == NULL) return 1; //error code
 
 	strcpy(anode->name, name);
 	strcpy(anode->birthdate, birth);
 	strcpy(anode->phone, phone);
-	anode->next = NULL;
 
-	if (head == NULL)
-		head = anode;
-	else
-		struct PHONE_NODE *curr = head;
-		while(curr->next)
-			curr = curr->next;
+    anode->next = NULL;
 
-		curr->next = anode;
+    struct PHONE_NODE *curr = head;
+    if (head == NULL){
+        head = anode;
+    } else { 
+        while(curr->next){
+            curr = curr->next;
+	}
+    }
+    curr->next = anode;        
 
 
 	return 0;
 }
 
-struct PHONE_NODE* findrecord(char name[]) {
-	struct PHONE_NODE curr = head;
+
+struct PHONE_NODE* findRecord(char name[]) {
+	struct PHONE_NODE *curr = head;
 	while(curr) 
 		if(strcmp(curr->name, name) == 0)
-			return curr; 
+		return curr; 
 
 		curr = curr -> next;
 	return NULL; 	
 }
-
 
 void printHeading() {
 	 printf("---- NAME ---- ---- BIRTH DATE ---- ---- PHONE ----\n");
@@ -121,14 +128,15 @@ void printContent(char *name, char *bith, char *phone) {
 
 int listRecords() {
 
-	if (head == NULL || isEmptyCSV) return 1;
+	if (head == NULL) return 1;
 
 	printHeading();
-	
-	*PHONE_NODE curr = head;
-	while(curr != NULL)
+
+
+	struct PHONE_NODE *curr = head;
+	while(curr != NULL) {
 		printContent(curr->name, curr->birthdate, curr->phone);
 		curr = curr->next;
-
+	}
 	return 0;	
 }
