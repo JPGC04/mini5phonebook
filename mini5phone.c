@@ -21,7 +21,6 @@ int loadCSV(char *filename) {
 
 
 	//nextIndex = 0;
-	fgets(buffer,999,p);
 	while(fgets(buffer, 999, p)) {
 		// parse the CSV record
 
