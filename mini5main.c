@@ -35,7 +35,12 @@ int main() {
 				break;
 
 			case 2:
-				break; // Temporary until updated
+				printf("Name to delete: "); fgets(name, 49, stdin);
+
+				exitCode = delete(name);
+				if (exitCode != 0) printf("Sorry not found\n");
+
+				break;
 
 			case 3:
 				printf("Find name: "); fgets(name,49,stdin); name[strlen(name)-1] = '\0';

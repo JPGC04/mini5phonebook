@@ -137,3 +137,26 @@ int listRecords() {
 	}
 	return 0;	
 }
+
+int delete(char name[]) {
+	struct PHONE_NODE *curr = head;
+	struct PHONE_NODE *nextNode = curr->next;
+
+	if (findRecord(name) == NULL) {
+		return 1;
+	}
+
+	while (curr != NULL) {
+		if (strcmp(nextNode->name, name) == 0) {
+			curr->next = nextNode->next;
+			free(nextNode);
+			return 0;
+		}
+
+		curr = nextNode;
+        	nextNode = nextNode->next;
+	}
+
+	return 0;
+		
+}
