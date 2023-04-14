@@ -19,10 +19,11 @@ int loadCSV(char *filename) {
 	
 	fgets(buffer,999,p); // to read the CSV header (we discard it)
 
-
-	//nextIndex = 0;
+	// Changed while loop to reflect to linked list data structure
+	
 	while(fgets(buffer, 999, p)) {
-		// parse the CSV record
+
+		// parse the CSV record and create space for the new node
 
 		struct PHONE_NODE *anode = (struct PHONE_NODE*) malloc(sizeof(struct PHONE_NODE));
 
@@ -68,6 +69,8 @@ int saveCSV(char *filename) {
 	if (p == NULL) return 1; // error code
 
 	if (anode == NULL) return 2; // error code
+	
+	// Saving CSV by printing their names, birthdate, and phone into the phonebook file
 
 	while(anode){
 		fprintf(p,"%s,%s,%s\n", anode->name, anode->birthdate, anode->phone);
@@ -79,6 +82,8 @@ int saveCSV(char *filename) {
 }
 
 int addRecord(char name[], char birth[], char phone[]) {
+
+
     struct PHONE_NODE *anode = (struct PHONE_NODE*) malloc(sizeof(struct PHONE_NODE));
     if (anode == NULL) {
 	    return 1;
@@ -106,6 +111,9 @@ int addRecord(char name[], char birth[], char phone[]) {
 
 struct PHONE_NODE* findRecord(char name[]) {
 	struct PHONE_NODE *curr = head;
+
+	// Traversing the linked list to compare if the names match
+
 	while(curr != NULL) {
 	       if(strcmp(curr->name, name) == 0) {
 		       return curr;
@@ -131,6 +139,9 @@ int listRecords() {
 
 
 	struct PHONE_NODE *curr = head;
+
+	// Traversing the linked list starting at the head, and printing the content using the function above
+
 	while(curr != NULL) {
 		printContent(curr->name, curr->birthdate, curr->phone);
 		curr = curr->next;
