@@ -35,13 +35,14 @@ int main() {
 				break;
 
 			case 2:
-				char *select2;
+				char select2;
 				int choice2;
+				char garbage[5];
 
-				printf("(D)elete or (C)lear > "); scanf("%s", select2);
-				if (strcmp(select2, "D") == 0) {
+				printf("(D)elete or (C)lear > "); scanf("%c", &select2); fgets(garbage,5,stdin);
+				if (select2 == 'D') {
 					choice2 = 1;
-				} else if (strcmp(select2, "C") == 0) {
+				} else if (select2 == 'C') {
 					choice2 = 2;
 				} else {
 					choice2 = 3;
@@ -55,9 +56,9 @@ int main() {
 						break;
 
 					case 2:
-						char *select3;
+						char select3[2];
 
-						printf("Are you sure (Y/N) > ");  scanf("%s", select3);
+						printf("Are you sure (Y/N) > "); scanf("%1s", select3); fgets(garbage, 5, stdin);
 
 						if (strcmp(select3, "Y") == 0) {
 							clear();
@@ -67,11 +68,14 @@ int main() {
 							break;
 						}
 
+						break;
+
 					default:
 						printf("Invalid menu selection\n");
+						break;
 
 				}
-
+				break;
 			case 3:
 				printf("Find name: "); fgets(name,49,stdin); name[strlen(name)-1] = '\0';
 
