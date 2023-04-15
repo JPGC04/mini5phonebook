@@ -157,15 +157,21 @@ int delete(char name[]) {
 	struct PHONE_NODE *curr = head;
 	struct PHONE_NODE *nextNode = curr->next;
 	
+	// Checks if the head name is null, meaning that the phonebook is empty, and therefore exits out of the funcion
+
 	if (head->name == NULL) {
 		return 1;
 	}
+
+	// Checks if the head is the one that is meant to be deleted and removes and frees it
 
 	if (strcmp(curr->name, name) == 0) {
 		head = nextNode;
 		free(curr);
 		return 0;
 	}
+
+	// Traverses through the next node until the a name matches the input name, and removes and frees that node
 
 	while (nextNode != NULL) {
 		if (strcmp(nextNode->name, name) == 0) {
@@ -185,6 +191,8 @@ int delete(char name[]) {
 int clear() {
 	struct PHONE_NODE *curr = head;
 	struct PHONE_Node *temp;
+
+	// Traverses through all nodes and deletes them and frees the space
 
 	while (curr != NULL) {
 		temp = curr;
