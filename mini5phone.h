@@ -12,7 +12,9 @@ struct PHONE_NODE *findRecord(char *name);
 int listRecords();
 int saveCSV(char *filename);
 int loadCSV(char *filename);
+
 void printHeading();
 void printContent(char *name, char *birthdate, char *phone);
+
 int delete(char name[]);
 int clear();

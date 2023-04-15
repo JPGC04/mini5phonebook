@@ -11,6 +11,7 @@ int loadCSV(char *filename) {
 	char buffer[1000];
 	int i,j;
 	struct PHONE_NODE *prev = NULL;
+	
 	if (p == NULL) {
 		return 1; // error code
 	}
@@ -26,20 +27,24 @@ int loadCSV(char *filename) {
 		// parse the CSV record and create space for the new node
 
 		struct PHONE_NODE *anode = (struct PHONE_NODE*) malloc(sizeof(struct PHONE_NODE));
+		
+		if (anode == NULL) {
+			return 1; // error code
+		}
 
-		for(j=0,i=0;i<999&&buffer[i]!='\0'&&buffer[i]!=',';i++,j++)
-			anode->name[j]=buffer[i];
+		for(j=0, i=0; i<999 && buffer[i]!='\0' && buffer[i]!=','; i++, j++)
+			anode->name[j] = buffer[i];
 
 		anode->name[j]='\0';
 		i++;
 
-		for(j=0;i<999&&buffer[i]!='\0'&&buffer[i]!=',';i++,j++)
-			anode->birthdate[j]=buffer[i];
+		for(j=0; i<999 && buffer[i]!='\0' && buffer[i]!=','; i++, j++)
+			anode->birthdate[j] = buffer[i];
 
 		anode->birthdate[j]='\0';
 		i++;
 
-		for(j=0;i<999&&buffer[i]!='\0'&&buffer[i]!='\n';i++,j++)
+		for(j=0; i<999 && buffer[i]!='\0' && buffer[i]!='\n'; i++, j++)
 			anode->phone[j]=buffer[i];
 
 		anode->phone[j]='\0';
@@ -76,18 +81,18 @@ int saveCSV(char *filename) {
 		fprintf(p,"%s,%s,%s\n", anode->name, anode->birthdate, anode->phone);
 		anode = anode->next;
 	}
+
 	fclose(p);
 
 	return 0;
 }
 
 int addRecord(char name[], char birth[], char phone[]) {
-
-
     struct PHONE_NODE *anode = (struct PHONE_NODE*) malloc(sizeof(struct PHONE_NODE));
+    
     if (anode == NULL) {
-	    return 1;
-    } //error code
+	    return 1; // error code
+    }
 
     strcpy(anode->name, name);
     strcpy(anode->birthdate, birth);
@@ -99,7 +104,6 @@ int addRecord(char name[], char birth[], char phone[]) {
     if (head == NULL){
         head = anode;
     } else {
-	struct PHONE_NODE *curr = head;
         while(curr->next){
             curr = curr->next;
 	}
@@ -120,6 +124,7 @@ struct PHONE_NODE* findRecord(char name[]) {
 	       }
 	       curr = curr -> next;
 	}
+
 	return NULL; 	
 }
 
@@ -132,11 +137,9 @@ void printContent(char *name, char *bith, char *phone) {
 }
 
 int listRecords() {
-
 	if (head == NULL) return 1;
 
 	printHeading();
-
 
 	struct PHONE_NODE *curr = head;
 
@@ -146,12 +149,13 @@ int listRecords() {
 		printContent(curr->name, curr->birthdate, curr->phone);
 		curr = curr->next;
 	}
+
 	return 0;	
 }
 
 int delete(char name[]) {
 	if (head == NULL) {
-		return 1;
+		return 1; // error code
 	}
 
 	struct PHONE_NODE *curr = head;
@@ -185,12 +189,11 @@ int delete(char name[]) {
 	}
 
 	return 1;
-		
 }
 
 int clear() {
 	struct PHONE_NODE *curr = head;
-	struct PHONE_Node *temp;
+	struct PHONE_NODE *temp;
 
 	// Traverses through all nodes and deletes them and frees the space
 
@@ -201,4 +204,6 @@ int clear() {
 	}
 
 	head = NULL;
+
+	return 0;
 }
